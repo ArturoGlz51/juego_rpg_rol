@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>RPG - Repelente de Dragones</title>
+  </head>
+  <body>
+      <div id="overlay" onclick="iniciarJuego()" class="welcomeScreen">
+      <h1 class="welcomeText">REPELENTE DE DRAGONES</h1>
+      <p class="welcomeSubtitle">Haz clic para comenzar la aventura y defender tu pueblo!</p>
+    </div>
+    <div id="game">
+      <div id="stats">
+        <span class="stat">XP: <strong><span id="xpText">0</span></strong></span>
+        <span class="stat">Salud: <strong><span id="healthText">100</span></strong></span>
+        <span class="stat">Oro: <strong><span id="goldText">50</span></strong></span>
+      </div>
+
+      <div id="controls">
+        <button id="button1">Ir a la tienda</button>
+        <button id="button2">Ir a la cueva</button>
+        <button id="button3">Luchar contra el dragón</button>
+      </div>
+      <div id="monsterStats">
+        <span class="stat">Nombre del Monstruo: <strong><span id="monsterName"></span></strong></span>
+        <span class="stat">Salud: <strong><span id="monsterHealth"></span></strong></span>
+      </div>
+      <div id="text">
+        Bienvenido a Repelente de Dragones. Debes derrotar al dragón que impide a la gente salir del pueblo. Estás en la plaza del pueblo. ¿A dónde quieres ir? Usa los botones de arriba.
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
