@@ -32,68 +32,86 @@ const weapons = [
   { name: 'espada mágica', power: 265 }
 ];
 
+// --- MONSTRUOS ACTUALIZADOS ---
 const monsters = [
-  { name: "baba", level: 2, health: 15 },
-  { name: "bestia con colmillos", level: 8, health: 95 },
-  { name: "dragón", level: 20, health: 800 }
+  { name: "baba", level: 2, health: 15 },             
+  { name: "bestia con colmillos", level: 8, health: 95 }, 
+  { name: "esqueleto", level: 5, health: 100 },      
+  { name: "orco", level: 12, health: 180 },          
+  { name: "dragón", level: 20, health: 800 }          
 ];
 
 const locations = [
   {
-    name: "town square",
+    name: "town square", // Índice 0
     "button text": ["Ir a la tienda", "Ir a la cueva", "Luchar contra el dragón"],
     "button functions": [goStore, goCave, fightDragon],
     text: "Estás en la plaza del pueblo. Ves un letrero que dice \"Tienda\".",
     image: "assets/plaza.png"
   },
   {
-    name: "store",
+    name: "store", // Índice 1
     "button text": ["Comprar 10 de salud (10 oro)", "Comprar arma (30 oro)", "Ir a la plaza"],
     "button functions": [buyHealth, buyWeapon, goTown],
     text: "Entras a la tienda.",
     image: "assets/tienda.png"
   },
   {
-    name: "cave",
-    "button text": ["Luchar contra baba", "Luchar contra bestia", "Ir a la plaza"],
-    "button functions": [fightSlime, fightBeast, goTown],
-    text: "Entras a la cueva. Ves algunos monstruos.",
+    name: "cave", // Índice 2 (MODIFICADO: Ahora es una entrada)
+    "button text": ["Cueva poco profunda", "Cueva profunda", "Ir a la plaza"],
+    "button functions": [goWeakCave, goDeepCave, goTown],
+    text: "Entras a la cueva. El camino se divide en dos. ¿Hacia dónde quieres ir?",
     image: "assets/cueva.png"
   },
   {
-    name: "fight",
+    name: "fight", // Índice 3
     "button text": ["Atacar", "Esquivar", "Huir"],
     "button functions": [attack, dodge, goTown],
     text: "Estás luchando contra un monstruo.",
     image: "assets/pelea.png"
   },
   {
-    name: "kill monster",
+    name: "kill monster", // Índice 4
     "button text": ["Ir a la plaza", "Ir a la plaza", "Ir a la plaza"],
     "button functions": [goTown, goTown, easterEgg],
     text: 'El monstruo grita "¡Arg!" mientras muere. Ganas puntos de experiencia y encuentras oro.',
     image: "assets/ganada.png"
   },
   {
-    name: "lose",
+    name: "lose", // Índice 5
     "button text": ["¿VOLVER A JUGAR?", "¿VOLVER A JUGAR?", "¿VOLVER A JUGAR?"],
     "button functions": [restart, restart, restart],
     text: "Has muerto. &#x2620;",
     image: "assets/derrota.png"
   },
   { 
-    name: "win", 
+    name: "win", // Índice 6
     "button text": ["¿VOLVER A JUGAR?", "¿VOLVER A JUGAR?", "¿VOLVER A JUGAR?"], 
     "button functions": [restart, restart, restart], 
     text: "¡Derrotaste al dragón! ¡HAS GANADO EL JUEGO! &#x1F389;",
     image: "assets/victoria.png"
   },
   {
-    name: "easter egg",
+    name: "easter egg", // Índice 7
     "button text": ["2", "8", "¿Ir a la plaza?"],
     "button functions": [pickTwo, pickEight, goTown],
     text: "Encuentras un juego secreto. Elige un número arriba. Se elegirán diez números al azar entre 0 y 10. ¡Si el número que eliges coincide con uno de los números al azar, ganas!",
     image: "assets/easteregg.png"
+  },
+  // --- NUEVAS ZONAS DE LA CUEVA ---
+  {
+    name: "weak cave", // Índice 8
+    "button text": ["Luchar contra baba", "Luchar contra bestia", "Volver a la entrada"],
+    "button functions": [fightSlime, fightBeast, goCave],
+    text: "Estás en la parte iluminada de la cueva. Ves algunos monstruos débiles.",
+    image: "assets/cueva.png"
+  },
+  {
+    name: "deep cave", // Índice 9
+    "button text": ["Luchar contra esqueleto", "Luchar contra orco", "Volver a la entrada"],
+    "button functions": [fightSkeleton, fightOrc, goCave],
+    text: "Te adentras en la oscuridad profunda. El aire es pesado y acechan criaturas más fuertes.",
+    image: "assets/cueva.png" // Puedes cambiar esta imagen más adelante si quieres
   }
 ];
 
@@ -128,7 +146,11 @@ function goStore() {
     button2.onclick = sellWeapon;
   }
 }
+
+// Navegación de las cuevas
 function goCave() { update(locations[2]); }
+function goWeakCave() { update(locations[8]); }
+function goDeepCave() { update(locations[9]); }
 
 function buyHealth() {
   if (gold >= 10) {
@@ -184,9 +206,12 @@ function sellWeapon() {
   }
 }
 
+// Funciones de pelea actualizadas
 function fightSlime() { fighting = 0; goFight(); }
 function fightBeast() { fighting = 1; goFight(); }
-function fightDragon() { fighting = 2; goFight(); }
+function fightSkeleton() { fighting = 2; goFight(); }
+function fightOrc() { fighting = 3; goFight(); }
+function fightDragon() { fighting = 4; goFight(); } // Ahora el dragón es el índice 4
 
 function goFight() {
   update(locations[3]);
@@ -210,7 +235,8 @@ function attack() {
   if (health <= 0) {
     lose();
   } else if (monsterHealth <= 0) {
-    if (fighting === 2) {
+    // Si el índice es 4 (Dragón), ganaste el juego
+    if (fighting === 4) {
       winGame();
     } else {
       defeatMonster();
